@@ -469,7 +469,7 @@ a graph instance and an edge:
 (let [p1 (tg/add-vertex g {:title "ClojureWerkz" :url "http://clojurewerkz.org"})
       p2 (tg/add-vertex g {:title "Titanium"     :url "http://titanium.clojurewerkz.org"})
       e  (tg/add-edge g p1 p2 "links")]
-  (tg/remove-edge e))
+  (tg/remove-edge g e))
 ```
 
 
