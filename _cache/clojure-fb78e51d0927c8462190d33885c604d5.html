@@ -1,0 +1,13 @@
+<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">myservice.graphs</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojurewerkz.titanium.graph</span>    <span class="ss">:as</span> <span class="nv">tg</span><span class="p">]</span>
+            <span class="p">[</span><span class="nv">clojurewerkz.titanium.elements</span> <span class="ss">:as</span> <span class="nv">te</span><span class="p">]))</span>
+
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">main</span>
+  <span class="p">[</span><span class="o">&amp;</span> <span class="nv">args</span><span class="p">]</span>
+  <span class="c1">;; in-RAM graph database used here only for demonstration</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">g</span> <span class="p">(</span><span class="nf">tg/open-in-memory-graph</span><span class="p">)</span>
+        <span class="nv">v</span> <span class="p">(</span><span class="nf">tg/add-vertex</span> <span class="nv">g</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Titanium&quot;</span> <span class="ss">:language</span> <span class="s">&quot;Clojure&quot;</span><span class="p">})]</span>
+    <span class="c1">;= {&quot;name&quot; &quot;Titanium&quot; &quot;language&quot; &quot;Clojure&quot;}</span>
+    <span class="p">(</span><span class="nf">te/properties-of</span> <span class="nv">v</span><span class="p">)))</span>
+</code></pre>
+</div>

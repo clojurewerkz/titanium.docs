@@ -1,0 +1,10 @@
+<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">myservice.graphs</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojurewerkz.titanium.graph</span> <span class="ss">:as</span> <span class="nv">tg</span><span class="p">]))</span>
+
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">main</span>
+  <span class="p">[</span><span class="o">&amp;</span> <span class="nv">args</span><span class="p">]</span>
+  <span class="c1">;; opens a BerkeleyDB-backed graph database in a temporary directory</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">g</span> <span class="p">(</span><span class="nf">tg/open</span> <span class="p">(</span><span class="nf">System/getenv</span> <span class="s">&quot;java.io.tmpdir&quot;</span><span class="p">))]</span>
+    <span class="p">(</span><span class="nb">comment </span><span class="nv">Work</span> <span class="nv">with</span> <span class="nv">the</span> <span class="nv">graph</span> <span class="nv">here</span><span class="p">)))</span>
+</code></pre>
+</div>
