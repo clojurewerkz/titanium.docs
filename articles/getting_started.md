@@ -109,6 +109,8 @@ function that accepts
 
 ### In-Memory Graph DB
 
+In-memory graph can be obtained using the `clojurewerkz.titanium.graph/open-in-memory-graph` function:
+
 ``` clojure
 (ns myservice.graphs
   (:require [clojurewerkz.titanium.graph :as tg]))
@@ -124,7 +126,8 @@ function that accepts
 ### Local Graph DB
 
 To use BerkeleyDB backend, pass a local database path as a string or a path to
-a `.properties` file that [configures Titan to use BerkeleyDB](https://github.com/thinkaurelius/titan/wiki/Using-BerkeleyDB).
+a `.properties` file that [configures Titan to use BerkeleyDB](https://github.com/thinkaurelius/titan/wiki/Using-BerkeleyDB)
+to `clojurewerkz.titanium.graph/open`.
 
 An example suitable for testing and REPL experimentation:
 
