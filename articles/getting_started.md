@@ -290,6 +290,7 @@ mimics [clojure.core/assoc!](http://clojuredocs.org/clojure_core/clojure.core/as
 ```
 
 To merge a map (or multiple maps) into the map of vertex properties, use `clojurewerkz.titanium.elements/merge!`:
+
 ``` clojure
 (require '[clojurewerkz.titanium.elements :as te])
 
@@ -430,6 +431,7 @@ mimics [clojure.core/assoc!](http://clojuredocs.org/clojure_core/clojure.core/as
 ```
 
 To merge a map (or multiple maps) into the map of edge properties, use `clojurewerkz.titanium.elements/merge!`:
+
 ``` clojure
 (require '[clojurewerkz.titanium.elements :as te])
 
