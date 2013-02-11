@@ -138,7 +138,7 @@ An example suitable for testing and REPL experimentation:
 (defn- main
   [& args]
   ;; opens a BerkeleyDB-backed graph database in a temporary directory
-  (let [g (tg/open (System/getenv "java.io.tmpdir"))]
+  (let [g (tg/open (System/getProperty "java.io.tmpdir"))]
     (comment Work with the graph here)))
 ```
 
