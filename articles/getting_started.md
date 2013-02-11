@@ -290,6 +290,7 @@ mimics [clojure.core/assoc!](http://clojuredocs.org/clojure_core/clojure.core/as
 ```
 
 To merge a map (or multiple maps) into the map of vertex properties, use `clojurewerkz.titanium.elements/merge!`:
+
 ``` clojure
 (require '[clojurewerkz.titanium.elements :as te])
 
@@ -430,6 +431,7 @@ mimics [clojure.core/assoc!](http://clojuredocs.org/clojure_core/clojure.core/as
 ```
 
 To merge a map (or multiple maps) into the map of edge properties, use `clojurewerkz.titanium.elements/merge!`:
+
 ``` clojure
 (require '[clojurewerkz.titanium.elements :as te])
 
@@ -467,7 +469,7 @@ a graph instance and an edge:
 (let [p1 (tg/add-vertex g {:title "ClojureWerkz" :url "http://clojurewerkz.org"})
       p2 (tg/add-vertex g {:title "Titanium"     :url "http://titanium.clojurewerkz.org"})
       e  (tg/add-edge g p1 p2 "links")]
-  (tg/remove-edge e))
+  (tg/remove-edge g e))
 ```
 
 
