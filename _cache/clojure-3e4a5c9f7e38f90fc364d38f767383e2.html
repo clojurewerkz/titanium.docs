@@ -1,7 +1,0 @@
-<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">clojurewerkz.titanium.graph</span> <span class="ss">:as</span> <span class="nv">tg</span><span class="p">])</span>
-
-<span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">p1</span> <span class="p">(</span><span class="nf">tg/add-vertex</span> <span class="nv">g</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;ClojureWerkz&quot;</span> <span class="ss">:url</span> <span class="s">&quot;http://clojurewerkz.org&quot;</span><span class="p">})</span>
-      <span class="nv">p2</span> <span class="p">(</span><span class="nf">tg/add-vertex</span> <span class="nv">g</span> <span class="p">{</span><span class="ss">:title</span> <span class="s">&quot;Titanium&quot;</span>     <span class="ss">:url</span> <span class="s">&quot;http://titanium.clojurewerkz.org&quot;</span><span class="p">})]</span>
-  <span class="p">(</span><span class="nf">tg/add-edge</span> <span class="nv">g</span> <span class="nv">p1</span> <span class="nv">p2</span> <span class="s">&quot;links&quot;</span> <span class="p">{</span><span class="ss">:verified-on</span> <span class="s">&quot;February 11th, 2013&quot;</span><span class="p">}))</span>
-</code></pre>
-</div>
