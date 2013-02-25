@@ -13,7 +13,7 @@ We recommend that you read these guides, if possible, in this order:
 ### [Getting started](/articles/getting_started.html)
 
 An overview of Titanium with a quick tutorial that helps you to get started with it. It should take about
-10 minutes to read and study the provided code examples
+10 minutes to read and study the provided code examples.
 
 ### [Populating the graph](/articles/populating.html) [TBD]
 
