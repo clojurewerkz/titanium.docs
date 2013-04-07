@@ -3,8 +3,9 @@ title: "Getting Started with Titanium, a Clojure graph library"
 layout: article
 ---
 
-This guide combines an overview of Titanium with a quick tutorial that helps you to get started with it.
-It should take about 15 minutes to read and study the provided code examples. This guide covers:
+This guide combines an overview of Titanium with a quick tutorial that
+helps you to get started with it. It should take about 10 minutes to
+read and study the provided code examples. This guide covers:
 
  * Features of Titanium
  * Clojure and Titan version requirements
@@ -13,7 +14,11 @@ It should take about 15 minutes to read and study the provided code examples. Th
  * Basic operations (creating vertices and edges, fetching vertices, graph queries)
  * Transaction control basics
 
-This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a> (including images & stylesheets). The source is available [on Github](https://github.com/clojurewerkz/titanium.docs).
+This work is licensed under a <a rel="license"
+href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+Attribution 3.0 Unported License</a> (including images & stylesheets).
+The source is available
+[on Github](https://github.com/clojurewerkz/titanium.docs).
 
 
 ## What version of Titanium does this guide cover?
