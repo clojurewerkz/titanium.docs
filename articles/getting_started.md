@@ -3,12 +3,13 @@ title: "Getting Started with Titanium, a Clojure graph library"
 layout: article
 ---
 
-### Every journey begins with a single parentheses
+## Getting Started
 
-This guide meant to provide a quick taste of what Titanium does and
-why you should drop everything in order to dive into the rest of the
-documentation. It should take about 10 minutes to read and study the
-provided code examples. The contents include:
+> Every journey begins with a single `(`. 
+
+This guide is meant to provide a quick taste of Titanium and all the
+power it provides. It should take about 10 minutes to read and study
+the provided code examples. The contents include:
 
  * What Titanium is
  * What Titanium is not
@@ -86,8 +87,9 @@ And then add the dependency:
 ```
 
 It is recommended to stay up-to-date with new versions. New releases
-and important changes are announced
-[@ClojureWerkz](http://twitter.com/ClojureWerkz).
+and important changes are announced via
+[@ClojureWerkz](http://twitter.com/ClojureWerkz) and the
+[Clojurewerkz](http://blog.clojurewerkz.org/).
 
 
 ## Brief Introduction to Graph Databases
@@ -346,10 +348,9 @@ run the experiment a few times.
 Congratulations, you now can use Titanium to do basic graph theory!
 Now, it is the time to start learning enough to start building
 something real. There are many features that we haven't covered here;
-they will be explored in the rest of the guides.
-
-We hope you find Titanium reliable, consistent and easy to use. In
-case you need help, please ask on the
+they will be explored in the rest of the guides. We hope you find
+Titanium reliable, consistent and easy to use. In case you need help,
+please ask on the
 [mailing list](https://groups.google.com/forum/#!forum/clojure-titanium),
 subscribe to [our blog](http://blog.clojurewerkz.org) and/or
 [follow us on Twitter](http://twitter.com/ClojureWerkz).
@@ -363,7 +364,7 @@ We recommend that you read the following guides in this order:
  * [Working with Vertices](/articles/vertices.html)
  * [Working with Edges](/articles/edges.html) 
  * [Defining Types](/articles/types.html)  
- * [Indexing](/articles/types.html)   
+ * [Indexing](/articles/indexing.html)   
  * [Simple Graph Queries](/articles/queries.html)   
  * [Ogre Integration](/articles/ogre.html)    
 

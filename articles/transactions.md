@@ -1,91 +1,105 @@
-## Persisting Changes: Transaction Control
+--- 
+title: "Transaction Management" 
+layout: article 
+---
 
-Every graph operation in Titan occurs within the context of a transaction. Usually there
-is [no need to explicitly start a transaction](https://github.com/thinkaurelius/titan/wiki/Transaction-Handling): Titan will automatically start one
-tied to the current thread on the first operation.
+## Transaction Management
 
-Transactions that happen across multiple threads (when the graph is populated or
-updated from multiple threads) need to be started explicitly.
+During the development of Archimedes and Titanium, a decision was made
+to only support explict use of transactions. That means that errors
+will be thrown if most functions from Titanium are used outside the
+body of a `clojurewerkz.titanium.graph/transact!` call. In addition,
+vertex and edge objects automatically go stale outside transactions
+and must be refreshed to be reused in other transactions. Refreshing
+is very simple and is accomplished via
+`clojurewerkz.titanium.vertices/refresh!` and
+`clojurewerkz.titanium.edges/refresh!`. This guide will dive into how
+and why this style of transaction management is used.
 
-### Committing Changes
+### Transaction fundamentals 
+If you've read the
+[getting started guide](articles/getting_started.html), you'll already
+have had exposure to `transact!`. Using `transact!` is
+straightforward:
 
-To persist changes to a durable storage (Cassandra, BerkeleyDB, etc), a transaction needs to be committed.
-In Titanium, this is done via the `clojurewerkz.titanium.graph/commit-tx!` function:
+```clojure
+(tg/transact! (tv/create!)) 
+;; #<PersistStandardTitanVertexv[404]> 
+``` 
 
-``` clojure
-(require '[clojurewerkz.titanium.graph :as tg])
+Conceptually, think of `transact!` as a `do`. The result of
+`transact!` will be the last s-expression evaluated inside the body.
+If an error occurs, Titanium will let it be thrown and expects you to
+deal with it.
 
-(let [g  (tg/open-in-memory-graph)
-      v1 (tg/add-vertex g {:age 28 :name "Michael"})
-      v2 (tg/add-vertex g {:age 26 :name "Alex"})
-      e  (tg/add-edge g v1 v2 "friend" {:since 2008})]
-    ;; commits changes to durable storage
-    (tg/commit-tx! g)
-```
+### Complex transactions 
 
-### Automatic Commit On Shutdown
-
-Closing a graph with `clojurewerkz.titanium.graph/close` will commit
-the current automatically started transaction (if any).
-
-
-### Rolling Back Changes
-
-To roll back a transaction, use `clojurewerkz.titanium.graph/rollback-tx!`:
-
-``` clojure
-(require '[clojurewerkz.titanium.graph :as tg])
-
-(let [g  (tg/open-in-memory-graph)
-      v1 (tg/add-vertex g {:age 28 :name "Michael"})
-      v2 (tg/add-vertex g {:age 26 :name "Alex"})
-      e  (tg/add-edge g v1 v2 "friend" {:since 2008})]
-    ;; rolls back changes
-    (tg/rollback-tx! g)
-```
-
-
-### Explicit Transactions
-
-Transactions can be started explicitly using `clojurewerkz.titanium.graph/start-x` which
-takes a graph instance. The returned transaction then should be used instead of the graph
-instance with all graph operations (e.g. `clojurewerkz.titanium.graph/add-vertex`):
+`transact!` is just a macro which binds a var inside of Titanium to be
+a transaction and then takes care of the ceremony for executing the
+transaction and persisting it to the database. That means we can do
+all sorts of neat things inside transactions. The following
+transaction uses [Ogre](/articles/ogre.html) and finds a node by name, looks for the
+friends of the friends of the node, takes their names and provides does a
+map containing the frequency of each name. 
 
 ``` clojure
-(let [g   (tg/open "/tmp/titanium/graph.db")
-      tx  (tg/start-tx g)]
-    (tg/add-vertex tx {})
-    (tg/commit-tx! tx)
-    (tg/close g))
+(require '[ogre.core :as oq])
+
+(tg/transact! 
+    (oq/query (tv/find-by-kv :name "Zack")
+              (oq/--> :friends)
+              (oq/--> :friends)
+              (oq/property :name)
+              oq/into-vec!
+              frequencies))
 ```
 
-Alternatively, `clojurewerkz.titanium.graph/run-transactionally` takes a graph and a function
-and yields a newly started transaction to it:
+The main gotcha to watch out for is lazy evaluation. A simple `doall`
+on results will take care of that. Otherwise, errors will be thrown
+all over the place about how you are trying to access elements outside
+of their transactional scope.
+
+### Refreshing objects
+    
+After a vertex or edge is returned from a transaction, it becomes
+stale. This means that before the object can be used again it must be
+refreshed using either `clojurewerkz.titanium.vertices/refresh!` or
+`clojurewerkz.titanium.edges/refresh!`.
 
 ``` clojure
-(let [g   (tg/open "/tmp/titanium/graph.db")]
-    (tg/run-transactionally g (fn [tx]
-      (tg/add-vertex tx {})))
-    (tg/close g))
+(def stale-node (tg/transact! (tv/create!)))
+
+(tg/transact! (tv/set-property! stale-node :name "Zack"))             ;; Shouldn't work!
+(tg/transact! (tv/set-property! (tv/refresh stale-node) :name "Zack")) ;; Should work!
 ```
 
-If an exception occurs during the execution of the function, the transaction will be
-rolled back. Otherwise it is committed after the function returns.
+### Retrying transactions
 
-Explicitly started transactions can be shared between threads. It is not necessary to use
-explicit transactions when only one thread modifies a graph and nested transactions are
-not necessary.
+While `transact!` and the two `refresh` methods might seem like
+overkill compared to other transaction system, development and
+reasoning about transactions becomes much easier. In particular, we
+can retry transactions very simply with the
+`clojurewerkz.titanium.graph/retry-transact!` method.
+`retry-transact!` takes two arguments and the body of the
+transactions. The first argument is a number indicating the number of
+times to retry the transaction. The second argument is either a number
+or a function which returns a number. This number will determine the
+minimum amount of time Titanium will wait before retrying each transaction. 
 
+``` clojure
+(let [start-time (System/currentTimeMillis)]
+        (tg/retry-transact! 3 100 
+                            (println (float (/ (- (System/currentTimeMillis) start-time) 1000)))
+                            (/ 1 0)))
+```
 
-### Transactions and In-memory Graphs
+Geometric backing off with small random offset:
 
-Note that in-memory graphs do not support transactions.
-
-
-## Closing a Graph
-
-To close a graph, use `clojurewerkz.titanium.graph/close`. It will flush all pending changes
-to durable storage. Closed graphs can no longer be used again.
-
-Graphs can be closed when an app is shutting down or after processing a batch of
-work.
+``` clojure
+(let [start-time (System/currentTimeMillis)
+      back-off  (fn [try-count] (+ (Math/pow 10 try-count) 
+                                (* try-count (rand-int 100))))]
+        (tg/retry-transact! 4 back-off
+                            (println (float (/ (- (System/currentTimeMillis) start-time) 1000)))
+                            (/ 1 0)))
+```

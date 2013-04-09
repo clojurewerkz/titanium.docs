@@ -1,3 +1,8 @@
+---
+title: "Configuring Titanium"
+layout: article
+---
+
 Titan configuration is typically file-based. `clojurewerkz.titanium.graph/open` is a polymorphic
 function that accepts
 

@@ -27,6 +27,9 @@
 body {
   background-image: url(/assets/images/escheresque_ste.png); }
 
+.brand {
+  font-color: white; }
+
 article pre {
   font-size: 13px !important; }
 

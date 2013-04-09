@@ -1,3 +1,8 @@
+---
+title: "Working with edges"
+layout: article
+---
+
 ## Working with Edges 
 
 [Good news everyone](http://www.youtube.com/watch?v=1D1cap6yETA)! If

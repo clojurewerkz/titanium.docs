@@ -1,3 +1,8 @@
+---
+title: "Working with Vertices"
+layout: article
+---
+
 ### Listing Property Names
 
 To obtain a list of property names, use `clojurewerkz.titanium.vertices/keys`:
