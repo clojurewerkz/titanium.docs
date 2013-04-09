@@ -5,18 +5,21 @@ layout: article
 
 ### Every journey begins with a single parentheses
 
-This guide combines an overview of Titanium with a quick tutorial that
-helps you to get started with it. It should take about 10 minutes to
-read and study the provided code examples. This guide covers Titanium
-1.0.x, specifically:
+This guide meant to provide a quick taste of what Titanium does and
+why you should drop everything in order to dive into the rest of the
+documentation. It should take about 10 minutes to read and study the
+provided code examples. The contents include:
 
- * Features of Titanium
+ * What Titanium is
+ * What Titanium is not
  * Clojure and Titan version requirements
  * How to add Titanium dependency to your project
  * A very brief introduction to graph databases and theory
- * How to create nodes and edges, fetch objects, and execute simple
-   queries 
- * Applications of Titanium to simple graph theory problems
+ * How to create objects
+ * How to find nodes again
+ * How to execute simple queries
+ * How to delete objects
+ * Graph theory for smug lisp weenies
 
 This work is licensed under a <a rel="license"href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images & stylesheets).
@@ -127,66 +130,65 @@ configuration and store the resulting object in a dynamic var.
 
 
 ``` clojure
-(ns titanium.intro
+(ns titanium.pre-intro
   (:require [clojurewerkz.titanium.graph :as tg]))
 
 (defn- main
   [& args]
   ;; opens a BerkeleyDB-backed graph database in a temporary directory
   (tg/open (System/getProperty "java.io.tmpdir"))
-  (comment Work with the graph here))
+  "Graph business goes here")
+```
+
+For the rest of the tutorial we will be working in the following
+namespace. You'll soon learn what all the required namespaces do and
+how they interact. 
+
+``` clojure
+(ns titanium.intro
+  (:require [clojurewerkz.titanium.graph    :as tg]
+            [clojurewerkz.titanium.edges    :as te]
+            [clojurewerkz.titanium.vertices :as tv]
+            [clojurewerkz.titanium.types    :as tt]
+            [clojurewerkz.titanium.query    :as tq]))
+            
+(tg/open (System/getProperty "java.io.tmpdir"))            
 ```
 
 ## Creating Vertices
 
 Vertices are created using the
-`clojurewerkz.titanium.vertices/create!` function. Please note that
+`clojurewerkz.titanium.vertices/create!` function which optionally
+takes in a map of properties to assign to the node. Please note that
 `clojurewerkz.titanium.graph/transact!` must always be the context in
 which any code touching the database is run. For more information,
 please see the [transaction management guide]().
 
-
+To create a single empty node: 
 ``` clojure
-(require '[clojurewerkz.titanium.graph :as tv])
-
-(tg/transact! 
- (tv/create! {:name "Titanium" :language "Clojure"}))
+(tg/transact! (tv/create!))
 ```
 
 A more detailed example: 
 
 ``` clojure
-(ns titanium.intro
-  (:require [clojurewerkz.titanium.graph    :as tg]
-            [clojurewerkz.titanium.vertices :as tv]))
-
-(defn- main
-  [& args]
-  (tg/open (System/getProperty "java.io.tmpdir")) 
-  (tg/transact!
-      (tv/create! {:name "Michael" :location "Europe"})
-      (tv/create! {:name "Zack"    :location "America"})))
+(tg/transact!
+ (tv/create! {:name "Michael" :location "Europe"})
+ (tv/create! {:name "Zack"    :location "America"}))
 ```
 
 ## Creating Edges
 
 Now that we know how to create vertices, we can begin creating edges
-with the `clojurewerkz.titanium.edges/connect!` function:
-
-``` clojure
-(require '[clojurewerkz.titanium.edges :as te])
-
-(tg/transact!
- (te/connect! v1 :connected v2))
-```
-
-Edges can have properties, just like vertices:
+with the `clojurewerkz.titanium.edges/connect!` function. Edges can
+optionally have properties, just like vertices.
 
 ``` clojure
 (tg/transact!
  (let [p1 (tv/create! {:title "ClojureWerkz" :url "http://clojurewerkz.org"})
        p2 (tv/create! {:title "Titanium"     :url "http://titanium.clojurewerkz.org"})]
-   (te/connect! p1 :links p2 {:verified-on "February 11th, 2013"})))
+   (te/connect! p1 :meaningless p2)
+   (te/connect! p1 :meaningful  p2 {:verified-on "February 11th, 2013"})))
 ```
 
 ## Indexing and retrieving vertices 
@@ -201,7 +203,6 @@ the type and then creates a
 [corresponding type in the Titan database](https://github.com/thinkaurelius/titan/wiki/Type-Definition-Overview). 
 
 ```clojure
-(require '[clojurewerkz.titanium.types :as tt])
 
 (tg/transact! 
  (tt/create-property-key :age Integer {:indexed-vertex? true :unique-direction :out}))
@@ -216,7 +217,6 @@ the type and then creates a
 
 (tg/transact!
  (tv/find-by-kv :age 22))
-;;#{#<CacheVertex v[12]> #<CacheVertex v[16]>}
 ```
 
 ## Simple queries 
@@ -233,125 +233,147 @@ from `clojurewerkz.titanium.query` to create a simple `degree-of`
 function that provides the degree of a given vertex. 
 
 ``` clojure
-(ns titanium.intro
-  (:require [clojurewerkz.titanium.graph    :as tg]
-            [clojurewerkz.titanium.edges    :as te]
-            [clojurewerkz.titanium.vertices :as tv]
-            [clojurewerkz.titanium.query    :as tq]))
-            
-(defn degree-of [v]
- (tq/count-edges v))
+(defn degree-of 
+  "Finds the degree of the given vertex."
+  [v]
+  (tq/count-edges v))
 
-(defn- main
-  [& args]
-  (tg/open (System/getProperty "java.io.tmpdir")) 
-  (tg/transact!
-      (let [v1 (tv/create!)
-            v2 (tv/create!)
-            v3 (tv/create!)
-            v4 (tv/create!)]
-            (te/connect! v1 :link v2)
-            (te/connect! v1 :link v3)
-            (println (map degree-of [v1 v2 v3 v4])))))
-            ;; (2 1 1 0)
+(tg/transact!
+ (let [v1 (tv/create!)
+       v2 (tv/create!)
+       v3 (tv/create!)
+       v4 (tv/create!)]
+   (te/connect! v1 :link v2)
+   (te/connect! v1 :link v3)
+   (println (map degree-of [v1 v2 v3 v4]))))
 ```
 
-## Basic graph theory 
+## Deleting objects
 
-Now we know how to create vertices and edges, find the previously
-created nodes, and query to find the degree of the vertices. Which,
-when you think about, covers, like, half of graph theory. Jokes aside,
-we can already start doing some interesting experiments. We will
+Deleting object from a graph is very simple. Call
+`clojurewerkz.titanium.edges/delete!` to delete an edge. To delete
+vertices, first make sure that all edges incident to the vertex are
+deleted and then call `clojurewerkz.titanium.vertices/delete!`. Let's
+use these methods to write a method that clears a database completely
+of all it's objects. We'll use
+`clojurewerkz.titanium.vertices/get-all-vertices` and
+`clojurewerkz.titanium.edges/get-all-edges` to make this task
+straightforward.
+
+``` clojure
+(defn clear-graph! 
+ "Clears the graph of all objects."
+ []
+ (doseq [e (te/get-all-edges)]
+   (te/delete! e))
+ (doseq [v (tv/get-all-vertices)]
+   (tv/delete! v)))
+
+(tg/transact!
+ (clear-graph!)    
+ (let [v1 (tv/create!)
+       v2 (tv/create!)
+       v3 (tv/create!)
+       v4 (tv/create!)]
+   (te/connect! v1 :link v2)
+   (te/connect! v1 :link v3)
+   (println (count (tv/get-all-vertices)) (count (te/get-all-edges)))
+   (clear-graph!)    
+   (println (count (tv/get-all-vertices)) (count (te/get-all-edges)))))
+```
+
+## Graph theory for smug lisp weenies
+
+Now we know how to create vertices and connect them together and ask
+questions about the degree of those vertices. Which, when you think
+about, covers, like, half of graph theory. Jokes aside, we can already
+start doing some interesting experiments. For this example, we will
 switch over to an in memory graph, since we don't much care about
-saving any of these nodes. 
+saving any of these nodes.
 
 Let's calculate the average degree for the
 [complete graph](http://en.wikipedia.org/wiki/Complete_graph):
 
 ``` clojure
-(ns titanium.intro
-  (:require [clojurewerkz.titanium.graph    :as tg]
-            [clojurewerkz.titanium.edges    :as te]
-            [clojurewerkz.titanium.vertices :as tv]
-            [clojurewerkz.titanium.types    :as tt]
-            [clojurewerkz.titanium.query    :as tq]))
+(defn average-degree 
+  "Finds the average for the degree of the vertices."
+  []
+  (float (/ (count (te/get-all-edges))
+            (count (tv/get-all-vertices)))))
 
-(defn degree-of [v]
- (tq/count-edges v))
+(defn complete-graph 
+  "Clears the graph and generates a complete graph."
+  [n]
+  (clear-graph!)
+  (let [vs (map #(tv/create! {:i %}) (range n))]      
+    (doseq [v vs w vs :when (not= v w)]
+      (te/connect! v :link w))))
 
-(defn average-degree []
- (tg/transact! 
-     (let [vs (tv/find-by-kv :type "vertex")]
-         (float (/ (->> vs (map degree-of) (reduce +)) (* 2 (count vs)))))))
-
-(defn complete-graph [n]
-  (tg/open {"storage.backend" "inmemory"})   
+(tg/open {"storage.backend" "inmemory"})
+(doseq [i (range 1 10)]
   (tg/transact!
-      (tt/create-property-key :type String {:indexed-vertex? true :unique-direction :out})
-      (let [vs (map #(tv/create! {:type "vertex" :i %}) (range n))]      
-          (doseq [v vs w vs :when (not= v w)]
-              (te/connect! v :link w)))))
-         
-(defn- main
-  [& args]
-  (doseq [i (range 1 10)]  
-      (complete-graph i)
-      (println i (average-degree))))
+   (complete-graph i)
+   (println i (average-degree))))
 ```
 
-What's the expected maximum degree of a random graph generated with an
-even chance of there being an edge between two nodes?
+Which gives results which are completely as expected. Let's get
+tricky and build a random graph. It'll have n nodes and the chances
+that any two nodes will be connected will be one half. What does the
+average degree become then? It'll vary, so we'll run make sure to
+run the experiment a few times. 
 
-TODO: rebuild this to reuse the graph. Really slow, trying to create a
-new graph each time. 
 ``` clojure
-(defn max-degree []
- (tg/transact! 
-     (apply max (map degree-of (tv/find-by-kv :type "vertex")))))
-
-(defn random-graph [n]
-  (tg/open {"storage.backend" "inmemory"})   
+(defn random-graph 
+  "Clears the graph and generates a random graph."
+  [n]
+  (clear-graph!)
+  (let [vs (map #(tv/create! {:i %}) (range n))]      
+    (doseq [v vs w vs :when (and (not= v w) (> 0.5 (rand)))]
+      (te/connect! v :link w))))
+      
+(defn run-experiment [i]
   (tg/transact!
-      (tt/create-property-key :type String {:indexed-vertex? true :unique-direction :out})
-      (let [vs (map #(tv/create! {:type "vertex" :i %}) (range n))]      
-          (doseq [v vs w vs :when (and (not= v w) (> 0.5 (rand)))]
-              (te/connect! v :link w)))))         
-(defn- main
-  [& args]
-  (doseq [i (range 1 10)]  
-      (let [results (for [j (range 10)] (do (random-graph i) (max-degree)))]
-          (println i (float (/ (reduce + results) (count results)))))))
+   (random-graph i)
+   (average-degree)))
+
+(doseq [i (range 1 10)]
+  (let [results (map run-experiment (take 10 (cycle [i])))]
+    (println i (average results))))
 ```
 
 ## Wrapping up
 
-Congratulations, you now can use Titanium to perform fundamental graph
-operations. Now you know enough to start building something real.
-There are many features that we haven't covered here; they will be
-explored in the rest of the guides.
+Congratulations, you now can use Titanium to do basic graph theory!
+Now, it is the time to start learning enough to start building
+something real. There are many features that we haven't covered here;
+they will be explored in the rest of the guides.
 
 We hope you find Titanium reliable, consistent and easy to use. In
 case you need help, please ask on the
 [mailing list](https://groups.google.com/forum/#!forum/clojure-titanium),
-subscribe to [our blog](http://blog.clojurewerkz.org) and
+subscribe to [our blog](http://blog.clojurewerkz.org) and/or
 [follow us on Twitter](http://twitter.com/ClojureWerkz).
 
-## What to read next
+### What's next
 
-The documentation is organized as a number of guides, covering all
-kinds of topics.
+We recommend that you read the following guides in this order:
 
-We recommend that you read the following guides first, if possible, in
-this order:
+ * [Transaction Management](/articles/transactions.html)
+ * [Configuring Titan](/articles/configuration.html) 
+ * [Working with Vertices](/articles/vertices.html)
+ * [Working with Edges](/articles/edges.html) 
+ * [Defining Types](/articles/types.html)  
+ * [Indexing](/articles/types.html)   
+ * [Simple Graph Queries](/articles/queries.html)   
+ * [Ogre Integration](/articles/ogre.html)    
 
- * [Populating the graph](/articles/populating.html) [TBD]
- * [Querying and Traversing the graph](/articles/traversing.html) [TBD]
-
-
-## Tell Us What You Think!
+### Tell Us What You Think!
 
 Please take a moment to tell us what you think about this guide on
 Twitter or the
 [Titanium mailing list](https://groups.google.com/forum/#!forum/clojure-titanium)
 
-Let us know what was unclear or what has not been covered. Maybe you do not like the guide style or grammar or discover spelling mistakes. Reader feedback is key to making the documentation better.
+Let us know what was unclear or what has not been covered. Reader
+feedback is key to making the documentation better. If we know people
+are reading the documentation, we'll be much more inclined to make the
+documentation that much better. Please speak up!
