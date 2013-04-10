@@ -3,7 +3,7 @@ title: "Getting Started with Titanium, a Clojure graph library"
 layout: article
 ---
 
-## Getting Started
+# Getting Started
 
 > Every journey begins with a single `(`. 
 
@@ -58,7 +58,7 @@ correctness and productivity and not benchmarks.
 Titanium is built from the ground up for Clojure 1.4 and later. The most recent
 stable release is always recommended.
 
-## Adding Titanium Dependency To Your Project
+## Adding Titanium dependency to your project
 
 ### With Leiningen
 
@@ -89,10 +89,10 @@ And then add the dependency:
 It is recommended to stay up-to-date with new versions. New releases
 and important changes are announced via
 [@ClojureWerkz](http://twitter.com/ClojureWerkz) and the
-[Clojurewerkz](http://blog.clojurewerkz.org/).
+[Clojurewerkz blog](http://blog.clojurewerkz.org/).
 
 
-## Brief Introduction to Graph Databases
+## Brief introduction to graph databases
 
 A graph is a data structure that represents objects and the
 connections between them. The objects being connected are called
@@ -107,7 +107,7 @@ and when the friendship started. In addition, there can be multiple
 edges between any two given nodes and edges can have a direction
 associated with them.
 
-## Opening a Graph
+## Opening a graph
 
 Titanium can
 [be configured](https://github.com/thinkaurelius/titan/wiki/Graph-Configuration)
@@ -157,7 +157,7 @@ how they interact.
 (tg/open (System/getProperty "java.io.tmpdir"))            
 ```
 
-## Creating Vertices
+## Creating vertices
 
 Vertices are created using the
 `clojurewerkz.titanium.vertices/create!` function which optionally
@@ -179,7 +179,7 @@ A more detailed example:
  (tv/create! {:name "Zack"    :location "America"}))
 ```
 
-## Creating Edges
+## Creating edges
 
 Now that we know how to create vertices, we can begin creating edges
 with the `clojurewerkz.titanium.edges/connect!` function. Edges can
@@ -364,17 +364,5 @@ We recommend that you read the following guides in this order:
  * [Working with Vertices](/articles/vertices.html)
  * [Working with Edges](/articles/edges.html) 
  * [Defining Types](/articles/types.html)  
- * [Indexing](/articles/indexing.html)   
  * [Simple Graph Queries](/articles/queries.html)   
- * [Ogre Integration](/articles/ogre.html)    
-
-### Tell Us What You Think!
-
-Please take a moment to tell us what you think about this guide on
-Twitter or the
-[Titanium mailing list](https://groups.google.com/forum/#!forum/clojure-titanium)
-
-Let us know what was unclear or what has not been covered. Reader
-feedback is key to making the documentation better. If we know people
-are reading the documentation, we'll be much more inclined to make the
-documentation that much better. Please speak up!
+ * [Ogre Integration](/articles/ogre.html)

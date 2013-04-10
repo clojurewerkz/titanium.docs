@@ -3,74 +3,95 @@ title: "Working with Vertices"
 layout: article
 ---
 
-### Listing Property Names
+## Working with Vertices 
 
-To obtain a list of property names, use `clojurewerkz.titanium.vertices/keys`:
+This guide provides a list of all methods for working with vertices in
+Titanium. Unless otherwise mentioned, all of the following functions
+reside in the `clojurewerkz.titanium.vertices` namespace.
+
+All examples should run with the following namespace declaration.
 
 ``` clojure
-(require '[clojurewerkz.titanium.vertices :as tv])
+(ns titanium.vertices
+  (:require [clojurewerkz.titanium.graph    :as tg]
+            [clojurewerkz.titanium.vertices :as tv]))
+            
+(tg/open (System/getProperty "java.io.tmpdir"))            
 
-(te/property-names v)
+(def example-vertex (tg/transact! (tv/create! {:name "Zack" :role "Example"})))
 ```
 
+## Creating vertices
+
+`create!` will create a vertex and, optionally, assign a map of
+properties to it as well.
+
+```
+(tg/transact! (tv/create!))
+(tg/transact! (tv/create! {:name "Bear"}))
+```
+
+## Getting properties 
+
+Below are methods which somehow deal with getting the properties of a
+node.
+
+### Getting a property
+
+To get a single property value, use `clojurewerkz.titanium.vertices/get`:
+
+``` clojure
+(tg/transact! (tv/get v :name))
+;; Zack
+```
+
+### Listing property names
+
+To obtain a set of the property names for a node, use
+`clojurewerkz.titanium.vertices/keys`:
+
+``` clojure
+(tg/transact! (te/keys v))
+;; #{:name :role}
+```
+
+### Listing property values
+
+To obtain a set of the property values for a node, use
+`clojurewerkz.titanium.vertices/vals`:
+
+``` clojure
+(tg/transact! (te/vals v))
+;; #{"Zack" "example"}
+```
 
 ### Getting the id
 
 To get the id of a vertex, use `clojurewerkz.titanium.vertices/id-of`:
 
 ``` clojure
-(require '[clojurewerkz.titanium.vertices :as tv])
-
-(tv/id-of v)
+(tv/id-of example-vertex)
+;; 1337
 ```
 
-### Getting a Property
-
-To get a single property value, use `clojurewerkz.titanium.vertices/get`:
-
-``` clojure
-(require '[clojurewerkz.titanium.vertices :as tv])
-
-(tv/get v :name)
-```
-
-### Getting all Properties
+### Getting all properties
 
 Vertices in Titanium are *mutable objects*. However, it is easy to
 obtain an immutable Clojure map of their properties using
 `clojurewerkz.titanium.vertices/to-map`:
 
 ``` clojure
-(require '[clojurewerkz.titanium.elements :as te])
-
-(te/to-map v)
-```
-
-A more detailed example: 
-
-``` clojure
-(ns myservice.graphs
-  (:require [clojurewerkz.titanium.graph    :as tg]
-  [clojurewerkz.titanium.vertices :as tv]))
-
-(defn- main
-  [& args]
-  (tg/open (System/getProperty "java.io.tmpdir")) 
-  (tg/transact!
-    (let [m {:name "Michael" :location "Europe"}
-          v (tv/create! m)
-          vm (tv/to-map v)]
-          (= "Michael" (:name vm))
-          (= "Europe"  (:location vm))
-          ;; {:__id__ 40004, :name Michael, :location Europe}
-          (println vm))))
+(te/to-map example-vertex)
+;; {:name "Zack" :role "example" :__id__ 1337}
 ```
 
 Note that the returned maps will include all of the original
 properties of the node, as well as an additional `:__id__` property
 which holds onto the id of the node. 
 
-### Setting Properties
+## Modifying properties 
+
+### Setting properties
 
 Because vertices in Titanium are mutable, functions that mutate their
 properties are named with an exclamation point ("bang") at the end,
@@ -87,7 +108,7 @@ To set one or more properties on a vertex, use
 (tv/assoc! v :status "crawled" :crawled-at date)
 ```
 
-### Merging Properties
+### Merging properties
 
 To merge a map (or multiple maps) into the map of vertex properties,
 use `clojurewerkz.titanium.vertices/merge!`:
@@ -98,7 +119,7 @@ use `clojurewerkz.titanium.vertices/merge!`:
 (tv/merge! v {:status "crawled" :crawled-at date})
 ```
 
-### Updating Properties
+### Updating properties
 
 To update a vertex's properties, use `clojurewerkz.titanium.vertices/update!`:
 
@@ -109,40 +130,28 @@ To update a vertex's properties, use `clojurewerkz.titanium.vertices/update!`:
 ```
 
 
-### Unsetting Properties
+### Unsetting properties
 
-To remove a property from a vertex, use `clojurewerkz.titanium.vertices/dissoc!`:
+To remove a property from a vertex, use `dissoc!`:
 
 ``` clojure
-(require '[clojurewerkz.titanium.vertices :as tv])
-
-(tv/dissoc! v :status :crawled-at)
+(tg/transact! (tv/dissoc! example-vertex :status :crawled-at))
 ```
 
+### Clearing all properties
 To clear all properties on a vertex, there is `clojurewerkz.titanium.vertices/clear!`:
 
 ``` clojure
-(require '[clojurewerkz.titanium.vertices :as tv])
-
-(tv/clear! v)
+(tg/transact! (tv/clear! example-vertex))
 ```
 
-### Removing Vertices
+## Deleting vertices
 
-To remove a vertex, use `clojurewerkz.titanium.vertices/remove!`:
+To delete a vertex, use `clojurewerkz.titanium.vertices/delete!`:
 
 ``` clojure
-(require '[clojurewerkz.titanium.vertices :as tv])
-
-(tv/remove! v)
+(tg/transact! (tv/delete! example-vertex))
 ```
 
-### Retrieving Vertices
+### Retrieving vertices
 
-To remove a vertex, use `clojurewerkz.titanium.vertices/remove!`:
-
-``` clojure
-(require '[clojurewerkz.titanium.vertices :as tv])
-
-(tv/find-by-kv! :name "Sarah Connor")
-```
