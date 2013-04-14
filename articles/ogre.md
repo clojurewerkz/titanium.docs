@@ -21,7 +21,7 @@ First, we'll switch into an appropriate namespace and open up the database:
   (:require [clojurewerkz.titanium.graph    :as tg]
             [clojurewerkz.titanium.vertices :as tv]
             [clojurewerkz.titanium.edges    :as ted]
-            [ogre.core :as g])
+            [ogre.core :as oq])
   (:import java.io.File))
 
 (tg/open (System/getProperty "java.io.tmpdir"))            
