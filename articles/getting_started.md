@@ -364,5 +364,4 @@ We recommend that you read the following guides in this order:
  * [Working with Vertices](/articles/vertices.html)
  * [Working with Edges](/articles/edges.html) 
  * [Defining Types](/articles/types.html)  
- * [Simple Graph Queries](/articles/queries.html)   
  * [Ogre Integration](/articles/ogre.html)

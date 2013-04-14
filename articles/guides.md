@@ -56,12 +56,6 @@ Types are the way in which you shape your raw data stuff and project
 it into the database. This guide explores the various options
 available to you as a developer for modeling your domain of choice.
 
-#### [Simple Graph Queries](/articles/queries.html)   
-
-If you're a speed demon and want to do your own query planning and
-traversal, this guide is for you. It goes into the methods provided by
-Titanium to perform simple queries. 
-
 #### [Ogre Integration](/articles/ogre.html)    
 
 [Ogre](http://ogre.clojurewerkz.org/) is a Clojure wrapper around the
