@@ -24,6 +24,12 @@
   .fixed-container:after {
     clear: both; }
 
+body {
+  background-image: url(/assets/images/escheresque_ste.png); }
+
+.brand {
+  font-color: white; }
+
 article pre {
   font-size: 13px !important; }
 
@@ -62,8 +68,6 @@ strong {
     line-height: 36px; }
 
 footer {
-  margin-top: 45px;
-  padding: 35px 0 0 0;
   border-top: 1px solid #e5e5e5; }
 
 .marketing h2 {
@@ -100,9 +104,6 @@ h2 {
   line-height: 2em; }
 
 @media (min-width: 767px) and (max-width: 979px) {
-  body {
-    background: none; }
-
   .headline h1 {
     font-size: 65px; }
 
@@ -110,9 +111,6 @@ h2 {
     padding-left: 0px;
     border-top: 1px solid #e5e5e5; } }
 @media (max-width: 767px) {
-  body {
-    background: none; }
-
   .headline h1 {
     font-size: 60px; }
 
@@ -120,9 +118,6 @@ h2 {
     padding-left: 0px;
     border-top: 1px solid #e5e5e5; } }
 @media (max-width: 480px) {
-  body {
-    background: none; }
-
   .headline {
     padding: 0; }
     .headline h1 {
@@ -134,7 +129,8 @@ h2 {
     padding-left: 0px;
     border-top: 1px solid #e5e5e5; } }
 .container {
-  padding: 20px; }
+  padding: 20px;
+  color: white; }
 
 .row-fluid {
   padding-top: 55px; }
