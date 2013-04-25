@@ -7,7 +7,7 @@ layout: article
 
 [Good news everyone](http://www.youtube.com/watch?v=1D1cap6yETA)! If
 you understood the section on
-[working with vertices](/articles/vertices.md), then you already
+[working with vertices](/articles/vertices.html), then you already
 understand about half of what it takes to work with edges.
 `clojurewerkz.titanium.edges` contains analogs for `get`,
 `keys`,`id-of`, `to-map`, `assoc!`, `dissoc!`, `merge!`, `update!`,
@@ -16,6 +16,8 @@ functions do exactly the same thing for edges as they do for vertices
 (with the exception that `to-map` returns a map with an extra
 `:__label__` property). The functions below are unique to
 `clojurewerkz.titanium.edges`. 
+
+All examples should run with the following namespace declaration and example data.
 
 ``` clojure
 (ns titanium.intro
@@ -64,12 +66,30 @@ edges with the given label between the given vertices. If so, it
 updates the found edges with the new properties. If not, it creates
 the edge and assigns the given properties to it.
 
+
+``` clojure
+(tg/transact! (tv/upconnect! (tv/refresh Zack)
+                             :brother-to 
+                             (tv/refresh Brooke)))
+```
+
 ### Unique upconnect
 
 `unique-upconnect!` does the same thing as `upconnect!`, but only
 returns one edge. If more than one edge is returned, an error is
 thrown.
 
+``` clojure
+(tg/transact! (tv/unique-upconnect! (tv/refresh Zack)
+                                    :brother-to 
+                                    (tv/refresh Brooke)))
+```
+
 ## Retrieve all edges
 
-`get-all-edges` returns all the edges in the graph.
+`get-all-edges` returns all the edges in the graph. Don't hurt yourself.
+
+``` clojure
+(tg/transact! (tv/get-all-edges))
+```
+

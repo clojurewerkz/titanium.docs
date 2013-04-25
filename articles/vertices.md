@@ -9,7 +9,7 @@ This guide provides a list of all methods for working with vertices in
 Titanium. Unless otherwise mentioned, all of the following functions
 reside in the `clojurewerkz.titanium.vertices` namespace.
 
-All examples should run with the following namespace declaration.
+All examples should run with the following namespace declaration and example data.
 
 ``` clojure
 (ns titanium.vertices
@@ -62,7 +62,7 @@ node.
 To get a single property value, use `get`:
 
 ``` clojure
-(tg/transact! (tv/get example-vertex :name))
+(tg/transact! (tv/get (tv/refresh example-vertex) :name))
 ;; Zack
 ```
 
@@ -72,7 +72,7 @@ To obtain a set of the property names for a node, use
 `keys`:
 
 ``` clojure
-(tg/transact! (tv/keys example-vertex))
+(tg/transact! (tv/keys (tv/refresh example-vertex)))
 ;; #{:name :role}
 ```
 
@@ -82,8 +82,8 @@ To obtain a set of the property values for a node, use
 `vals`:
 
 ``` clojure
-(tg/transact! (tv/vals example-vertex))
-;; #{"Zack" "example"}
+(tg/transact! (tv/vals (tv/refresh example-vertex)))
+;; #{"Zack" "Example"}
 ```
 
 ### Getting the id
@@ -102,7 +102,7 @@ obtain an immutable Clojure map of their properties using
 `to-map`:
 
 ``` clojure
-(tv/to-map example-vertex)
+(tg/transact! (tv/to-map (tv/refresh example-vertex)))
 ;; {:name "Zack" :role "example" :__id__ 1337}
 ```
 
@@ -124,7 +124,7 @@ To set one or more properties on a vertex, use
 [clojure.core/assoc!](http://clojuredocs.org/clojure_core/clojure.core/assoc!):
 
 ``` clojure
-(tv/assoc! v :status "crawled" :crawled-at date)
+(tg/transact! (tv/assoc! (tv/refresh example-vertex) :status "documenting" :eye-color "blue"))
 ```
 
 ### Merging properties
@@ -133,7 +133,7 @@ To merge a map (or multiple maps) into the map of vertex properties,
 use `merge!`:
 
 ``` clojure
-(tv/merge! v {:status "crawled" :crawled-at date})
+(tg/transact! (tv/merge! (tv/refresh example-vertex) {:status "documenting" :eye-color "blue"}))
 ```
 
 ### Updating properties
@@ -141,7 +141,8 @@ use `merge!`:
 To update a vertex's properties, use `update!`:
 
 ``` clojure
-(tv/update! v :age inc)
+(tg/transact! (tv/assoc!  (tv/refresh example-vertex) :toes 10))
+(tg/transact! (tv/update! (tv/refresh example-vertex) :toes inc))
 ```
 
 
@@ -150,22 +151,22 @@ To update a vertex's properties, use `update!`:
 To remove a property from a vertex, use `dissoc!`:
 
 ``` clojure
-(tg/transact! (tv/dissoc! example-vertex :status :crawled-at))
+(tg/transact! (tv/dissoc! (tv/refresh example-vertex) :toes))
 ```
 
 ### Clearing all properties
 To clear all properties on a vertex, there is `clear!`:
 
 ``` clojure
-(tg/transact! (tv/clear! example-vertex))
+(tg/transact! (tv/clear! (tv/refresh example-vertex)))
 ```
 
-## Deleting vertices
+## Removing vertices
 
-To delete a vertex, use `delete!`:
+To remove a vertex, use `remove!`:
 
 ``` clojure
-(tg/transact! (tv/delete! example-vertex))
+(tg/transact! (tv/remove! (tv/refresh example-vertex)))
 ```
 
 ## Retrieving vertices
@@ -176,11 +177,24 @@ The methods below provide various ways to retrieve vertices.
 
 Given an id, `find-by-id` retrieves the vertex with that idea. 
 
+``` clojure
+(tg/transact! (tv/find-by-id 24601))
+```
+
 ### Retrieving by key and value
 
 Given a key and a value, `find-by-kv` returns all the vertices which
 have that key and value in a set. 
 
+``` clojure
+(tg/transact! (tv/find-by-kv :name "Linus Torvalds"))
+```
+
 ### Retrieving all vertices
 
-`get-all-vertices` returns all vertices. 
+`get-all-vertices` returns all vertices in a graph. No, really. This
+could be very slow and might throw errors depending on your backend.
+
+``` clojure
+(tg/transact! (tv/get-all-vertices))
+```

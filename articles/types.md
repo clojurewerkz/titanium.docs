@@ -42,11 +42,11 @@ type.
 
 ### Defining property keys
 
-`create-property-key` takes in a keyword, class, and, optionally, a
+`defkey` takes in a keyword, class, and, optionally, a
 map of attributes for the type. Here's a quick example:
 
 ``` clojure
-(tg/transact! (tt/create-property-key :age Integer))
+(tg/transact! (tt/defkey :age Integer))
 ```
 
 This defines a property key called `:age` that will be an Integer.
@@ -54,9 +54,9 @@ Let's see a slightly more complicated example:
 
 ```clojure
 (tg/transact!       
- (tt/create-property-key :name String
-                         {:indexed-vertex? true
-                          :unique-direction :out}))
+ (tt/defkey :name String
+            {:indexed-vertex? true
+             :unique-direction :out}))
 ```
 
 This defines a property key called `:name` which expects a string. In
@@ -84,12 +84,12 @@ configure the creation of the property key:
 
 ### Defining edge labels
 
-`create-edge-label` takes in a keyword and, optionally, a
+`deflabel` takes in a keyword and, optionally, a
 map of attributes for the label. Here's a quick example:
 
 ``` clojure
 (tg/transact!
- (tt/create-edge-label :friends))
+ (tt/deflabel :friends))
 ```
 
 This simply creates a label called `:friends`. Let's see something a
@@ -97,8 +97,8 @@ bit more complicated:
 
 ``` clojure
 (tg/transact!
- (tt/create-edge-label :heard-of {:direction "unidirected"                                
-                                  :unique-direction :out}))
+ (tt/deflabel :heard-of {:direction "unidirected"                                
+                         :unique-direction :out}))
 ```
 
 The above creates a label called `:heard-of`. This label is
@@ -130,7 +130,7 @@ it can never be deleted or changed. Modifiable and removable types are
 on the road map for Titan, but they just aren't there yet. That means
 if you try to redefine a type when you restart a process, Titan will
 throw errors. Titanium provides the idempotent methods
-`create-property-key-once` and `create-edge-label-once`. These methods
+`defkey-once` and `deflabel-once`. These methods
 will check to see if the given type exists and then, if it does not,
 it will create the type. Otherwise it will do nothing. So, please
 remember, types are forever (or until you clear your database). 

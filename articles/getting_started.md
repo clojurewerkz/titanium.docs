@@ -14,17 +14,18 @@ the provided code examples. The contents include:
  * What Titanium is
  * What Titanium is not
  * Clojure and Titan version requirements
- * How to add Titanium dependency to your project
- * A very brief introduction to graph databases and theory
- * How to create objects
- * How to find nodes again
+ * How to include Titanium in your project
+ * A very brief introduction to graph databases
+ * How to create vertices and edges
+ * How to find vertices again
  * How to execute simple queries
- * How to delete objects
+ * How to remove objects
  * Graph theory for smug lisp weenies
 
-This work is licensed under a <a rel="license"href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
-Attribution 3.0 Unported License</a> (including images & stylesheets).
-The source is available
+This work is licensed under a <a
+rel="license"href="http://creativecommons.org/licenses/by/3.0/">Creative
+Commons Attribution 3.0 Unported License</a> (including images &
+stylesheets). The source is available
 [on Github](https://github.com/clojurewerkz/titanium.docs).
 
 
@@ -44,25 +45,24 @@ To learn more about the Titan database, please see the following:
 
 ## What Titanium is not
 
-Titanium is not a database. It relies on other data store engines to
-take care of on-disk durability. Titanium's value is in providing an
-expressive Clojure API for graph operations.
-
-Titanium is not an ORM/ODM. It does not provide graph visualization
-features. Depending on the definition, Titanium may or may not be Web
-Scale. Currently, the developers of Titanium are focused on
-correctness and productivity and not benchmarks. 
+Titanium is not a database. Titan relies on other data store engines
+to take care of on-disk durability. Titanium's value is in providing
+an expressive Clojure API for graph operations. Titanium is not an
+ORM/ODM. It does not provide graph visualization features. Depending
+on the definition, Titanium may or may not be Web Scale. Currently,
+the developers of Titanium are focused on correctness and productivity
+and not benchmarks.
 
 ## Supported Clojure versions
 
-Titanium is built from the ground up for Clojure 1.4 and later. The most recent
-stable release is always recommended.
+Titanium is built from the ground up for Clojure 1.4 and later. The
+most recent stable release is always recommended.
 
 ## Adding Titanium dependency to your project
 
 ### With Leiningen
 
-    [clojurewerkz/titanium "1.0.0-alpha4"]
+    [clojurewerkz/titanium "1.0.0-beta1"]
 
 ### With Maven
 
@@ -82,7 +82,7 @@ And then add the dependency:
 <dependency>
    <groupId>clojurewerkz</groupId>
     <artifactId>titanium</artifactId>
-   <version>1.0.0-alpha4</version>
+   <version>1.0.0-beta1</version>
 </dependency>
 ```
 
@@ -96,16 +96,16 @@ and important changes are announced via
 
 A graph is a data structure that represents objects and the
 connections between them. The objects being connected are called
-"vertices" or "nodes" and connections are called "edges" or
+"vertices" or "nodes" and the connections are called "edges" or
 "relationships". Vertices may have a multitude of different
-properties. A vertex could be used to represent a person and so might
-have properties for age, name, and gender. An edge links two vertices
-and it too can have many different properties. If two vertices
-represented two people, an edge connecting them could represent their
-friendship and have properties that detailed the last time they spoke
-and when the friendship started. In addition, there can be multiple
-edges between any two given nodes and edges can have a direction
-associated with them.
+properties. A vertex could be used to represent a person and so it
+might have properties for age, name, and gender. An edge links two
+vertices and it too can have many different properties. If two
+vertices represented two people, an edge connecting them could
+represent their friendship and have properties that detailed the last
+time they spoke and when the friendship started. In addition, there
+can be multiple edges between any two given nodes and edges can have a
+direction associated with them.
 
 ## Opening a graph
 
@@ -118,9 +118,7 @@ to use
  * [Apache Cassandra](https://github.com/thinkaurelius/titan/wiki/Using-Cassandra)
  * [Apache HBase](https://github.com/thinkaurelius/titan/wiki/Using-HBase)
 
-Titanium also allows for graphs to be stored in memory. Please note,
-putting information you care about only in the in-memory storage is
-usually a bad idea.
+Additionally, Titanium can also store graphs in memory.
 
 In this guide, we will be introducing some features of Titanium using
 an embedded instance of BerkeleyDB. For information about how to use
@@ -140,11 +138,13 @@ configuration and store the resulting object in a dynamic var.
   ;; opens a BerkeleyDB-backed graph database in a temporary directory
   (tg/open (System/getProperty "java.io.tmpdir"))
   "Graph business goes here")
+(main)
 ```
 
-For the rest of the tutorial we will be working in the following
-namespace. You'll soon learn what all the required namespaces do and
-how they interact. 
+If that worked, then you've installed everything correctly and can get
+started with Titanium. For the rest of the tutorial we will be working
+in the following namespace. You'll soon learn what all the required
+namespaces do and how they interact.
 
 ``` clojure
 (ns titanium.intro
@@ -159,19 +159,19 @@ how they interact.
 
 ## Creating vertices
 
-Vertices are created using the
-`clojurewerkz.titanium.vertices/create!` function which optionally
-takes in a map of properties to assign to the node. Please note that
-`clojurewerkz.titanium.graph/transact!` must always be the context in
-which any code touching the database is run. For more information,
-please see the [transaction management guide]().
+Vertices are created using `clojurewerkz.titanium.vertices/create!`.
+This function optionally takes in a map of properties to assign to the
+node. Please note that `clojurewerkz.titanium.graph/transact!` must
+always be the context in which any code touching the database is run.
+For more information, please see the [transaction management guide](/articles/transactions.html).
 
 To create a single empty node: 
+
 ``` clojure
 (tg/transact! (tv/create!))
 ```
 
-A more detailed example: 
+To create two nodes with associated data:
 
 ``` clojure
 (tg/transact!
@@ -199,15 +199,14 @@ Titanium isn't just a write only database. The library provides a
 variety of functions for indexing and finding various objects.
 `clojurewerkz.titanium.vertices/find-by-kv` takes in a keyword and a
 value and finds all of the vertices with the corresponding key/value
-pair. `clojurewerkz.titanium.types/create-property-key` takes in a
+pair. `clojurewerkz.titanium.types/defkey` takes in a
 keyword, a class, and, optionally, a map specifying how to configure
 the type and then creates a
 [corresponding type in the Titan database](https://github.com/thinkaurelius/titan/wiki/Type-Definition-Overview). 
 
 ```clojure
-
 (tg/transact! 
- (tt/create-property-key :age Integer {:indexed-vertex? true :unique-direction :out}))
+ (tt/defkey :age Long {:indexed-vertex? true :unique-direction :out}))
 
 (tg/transact! 
  (tv/create! {:name "Zack"   :age 22}))
@@ -226,7 +225,7 @@ the type and then creates a
 The final building block we need is to be able to ask questions about
 the graph we are constructing. Simple queries are handled by functions
 in the `clojurewerkz.titanium.query` namespace, while more complex
-queries can be performed using [Ogre](). 
+queries can be performed using [Ogre](http://ogre.clojurewerkz.org/).
 
 One of the most basic questions when working with graphs is
 determining the number of edges a vertex has. This quantity is
@@ -238,7 +237,7 @@ function that provides the degree of a given vertex.
 (defn degree-of 
   "Finds the degree of the given vertex."
   [v]
-  (tq/count-edges v))
+  (tq/count v))
 
 (tg/transact!
  (let [v1 (tv/create!)
@@ -250,12 +249,12 @@ function that provides the degree of a given vertex.
    (println (map degree-of [v1 v2 v3 v4]))))
 ```
 
-## Deleting objects
+## Removing objects
 
-Deleting object from a graph is very simple. Call
-`clojurewerkz.titanium.edges/delete!` to delete an edge. To delete
+Removing object from a graph is straightforward. Call
+`clojurewerkz.titanium.edges/remove!` to remove an edge. To remove
 vertices, first make sure that all edges incident to the vertex are
-deleted and then call `clojurewerkz.titanium.vertices/delete!`. Let's
+removed and then call `clojurewerkz.titanium.vertices/removed!`. Let's
 use these methods to write a method that clears a database completely
 of all it's objects. We'll use
 `clojurewerkz.titanium.vertices/get-all-vertices` and
@@ -267,9 +266,9 @@ straightforward.
  "Clears the graph of all objects."
  []
  (doseq [e (te/get-all-edges)]
-   (te/delete! e))
+   (te/remove! e))
  (doseq [v (tv/get-all-vertices)]
-   (tv/delete! v)))
+   (tv/remove! v)))
 
 (tg/transact!
  (clear-graph!)    
@@ -338,6 +337,9 @@ run the experiment a few times.
    (random-graph i)
    (average-degree)))
 
+(defn average [col]
+ (/ (reduce + col) (count col)))
+
 (doseq [i (range 1 10)]
   (let [results (map run-experiment (take 10 (cycle [i])))]
     (println i (average results))))
@@ -346,11 +348,11 @@ run the experiment a few times.
 ## Wrapping up
 
 Congratulations, you now can use Titanium to do basic graph theory!
-Now, it is the time to start learning enough to start building
-something real. There are many features that we haven't covered here;
-they will be explored in the rest of the guides. We hope you find
-Titanium reliable, consistent and easy to use. In case you need help,
-please ask on the
+Now, it is time to start learning enough to start building something
+real. There are many features that we haven't covered here; they will
+be explored in the rest of the guides. We hope you find Titanium
+reliable, consistent and easy to use. In case you need help, please
+ask on the
 [mailing list](https://groups.google.com/forum/#!forum/clojure-titanium),
 subscribe to [our blog](http://blog.clojurewerkz.org) and/or
 [follow us on Twitter](http://twitter.com/ClojureWerkz).

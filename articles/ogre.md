@@ -29,8 +29,8 @@ First, we'll switch into an appropriate namespace and open up the database:
 
 Note that Titanium is built with Ogre, and so `ogre.core` should be
 immediately available once you have Titanium as a dependency. Next,
-we'll create a version of the
-[canonical graph of the gods example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
+we'll create a simplified version of the [canonical graph of the gods
+example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
 :
 
 ``` clojure
@@ -71,8 +71,8 @@ we'll create a version of the
 ``` clojure
 (tg/transact! 
  (oq/query (tv/find-by-kv :name "Saturn")
-           (oq/<-- :father)
-           (oq/<-- :father)
+           (oq/<-- [:father])
+           (oq/<-- [:father])
            (oq/property :name)
            oq/first-of!))
 ;;"Hercules" 
@@ -83,7 +83,7 @@ we'll create a version of the
 ``` clojure
 (tg/transact!
  (oq/query (tv/find-by-kv :name "Hercules")
-           (oq/--> :father :mother)
+           (oq/--> [:father :mother])
            (oq/property :name)
            oq/into-set!))
 ;; #{"Alcmene" "Jupiter"}           
@@ -94,7 +94,7 @@ we'll create a version of the
 ``` clojure
 (tg/transact! 
  (oq/query (tv/find-by-kv :name "Hercules")
-           (oq/--E> :battled)
+           (oq/--E> [:battled])
            (oq/has :times > 1)
            (oq/in-vertex)
            (oq/property :name)
@@ -107,8 +107,9 @@ we'll create a version of the
 ``` clojure
 (tg/transact!
  (oq/query (tv/find-by-kv :name "Hercules")
-           (oq/--E> :battled)
+           (oq/--E> [:battled])
            oq/count!))
+;;3
 ```
 
 ### Who lives where Pluto lives?
@@ -117,8 +118,8 @@ we'll create a version of the
 (tg/transact!
  (let [pluto (first (tv/find-by-kv :name "Pluto"))]
    (oq/query pluto
-    (oq/--> :lives)
-    (oq/<-- :lives)
+    (oq/--> [:lives])
+    (oq/<-- [:lives])
     (oq/except [pluto])
     (oq/property :name)
     oq/into-set!)))
@@ -130,13 +131,14 @@ we'll create a version of the
 ``` clojure
 (tg/transact! 
  (oq/query (tv/find-by-kv :name "Pluto")
-           (oq/--> :brother)
+           (oq/--> [:brother])
            (oq/as  "god")
-           (oq/out :lives)
+           (oq/out [:lives])
            (oq/as  "place")
            (oq/select (oq/prop :name))
-           oq/all-into-vecs!))
-;; (["Neptune" "Sea"] ["Jupiter" "Sky"])           
+           oq/all-into-maps!
+           set))
+;;#{{:god "Neptune" :place "Sea"} {:god "Jupiter" :place "Sky"}}
 ```
 
 ### Conclusion 
