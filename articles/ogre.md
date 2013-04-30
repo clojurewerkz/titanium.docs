@@ -75,7 +75,7 @@ example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
            (oq/<-- [:father])
            (oq/property :name)
            oq/first-of!))
-;;"Hercules" 
+;= "Hercules" 
 ```          
 
 ### Who were the parents of Hercules? 
@@ -86,7 +86,7 @@ example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
            (oq/--> [:father :mother])
            (oq/property :name)
            oq/into-set!))
-;; #{"Alcmene" "Jupiter"}           
+;= #{"Alcmene" "Jupiter"}           
 ```
 
 ### What has Hercules battled more than once?
@@ -99,7 +99,7 @@ example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
            (oq/in-vertex)
            (oq/property :name)
            oq/into-set!))
-;; #{"Hydra" "Cerberus"}           
+;= #{"Hydra" "Cerberus"}           
 ```
 
 ### How many different things has Hercules battled? 
@@ -109,7 +109,7 @@ example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
  (oq/query (tv/find-by-kv :name "Hercules")
            (oq/--E> [:battled])
            oq/count!))
-;;3
+;= 3
 ```
 
 ### Who lives where Pluto lives?
@@ -123,7 +123,7 @@ example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
     (oq/except [pluto])
     (oq/property :name)
     oq/into-set!)))
-;;#{"Cerberus"}    
+;= #{"Cerberus"}    
 ```    
 
 ### Who are the brothers of Pluto and where do they live? 
@@ -138,7 +138,7 @@ example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
            (oq/select (oq/prop :name))
            oq/all-into-maps!
            set))
-;;#{{:god "Neptune" :place "Sea"} {:god "Jupiter" :place "Sky"}}
+;= #{ {:god "Neptune" :place "Sea"} {:god "Jupiter" :place "Sky"}}
 ```
 
 ### Conclusion 
