@@ -3,6 +3,20 @@ title: "Working with Vertices"
 layout: article
 ---
 
+## About this guide
+
+This guide covers
+
+ * How to create vertices
+ * How to delete vertices
+ * How to work with vertex attributes
+
+
+## What version of Titanium does this guide cover?
+
+This guide covers Titanium 1.0.0-beta1.
+
+
 ## Working with Vertices 
 
 This guide provides a list of all methods for working with vertices in
@@ -198,3 +212,23 @@ could be very slow and might throw errors depending on your backend.
 ``` clojure
 (tg/transact! (tv/get-all-vertices))
 ```
+
+## What's next
+
+We recommend that you read the following guides in this order:
+
+ * [Working with Edges](/articles/edges.html) 
+ * [Defining Types](/articles/types.html)  
+ * [Ogre Integration](/articles/ogre.html)
+
+
+
+## Tell Us What You Think!
+
+Please take a moment to tell us what you think about this guide on
+Twitter or the [Titanium mailing
+list](https://groups.google.com/forum/#!forum/clojure-titanium)
+
+Let us know what was unclear or what has not been covered. Maybe you
+do not like the guide style or grammar or discover spelling
+mistakes. Reader feedback is key to making the documentation better.

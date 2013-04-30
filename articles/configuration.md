@@ -3,6 +3,19 @@ title: "Configuring Titanium"
 layout: article
 ---
 
+## About this guide
+
+This guide covers
+
+ * How to configure Titan with Titanium
+ * How to use various storage backends
+
+
+## What version of Titanium does this guide cover?
+
+This guide covers Titanium 1.0.0-beta1.
+
+
 ## Configuring Titan
 
 `clojurewerkz.titanium.graph/open` is a polymorphic function that
@@ -75,3 +88,23 @@ backend and the config file for cassandra.
 ```
 
 
+### What's next
+
+We recommend that you read the following guides in this order:
+
+ * [Working with Vertices](/articles/vertices.html)
+ * [Working with Edges](/articles/edges.html) 
+ * [Defining Types](/articles/types.html)  
+ * [Ogre Integration](/articles/ogre.html)
+
+
+
+## Tell Us What You Think!
+
+Please take a moment to tell us what you think about this guide on
+Twitter or the [Titanium mailing
+list](https://groups.google.com/forum/#!forum/clojure-titanium)
+
+Let us know what was unclear or what has not been covered. Maybe you
+do not like the guide style or grammar or discover spelling
+mistakes. Reader feedback is key to making the documentation better.

@@ -3,6 +3,20 @@ title: "Working with edges"
 layout: article
 ---
 
+## About this guide
+
+This guide covers
+
+ * How to connect vertices with edges
+ * How to delete edges
+ * How to work with edge attributes
+
+
+## What version of Titanium does this guide cover?
+
+This guide covers Titanium 1.0.0-beta1.
+
+
 ## Working with Edges 
 
 [Good news everyone](http://www.youtube.com/watch?v=1D1cap6yETA)! If
@@ -93,3 +107,21 @@ thrown.
 (tg/transact! (tv/get-all-edges))
 ```
 
+## What's next
+
+We recommend that you read the following guides in this order:
+
+ * [Defining Types](/articles/types.html)  
+ * [Ogre Integration](/articles/ogre.html)
+
+
+
+## Tell Us What You Think!
+
+Please take a moment to tell us what you think about this guide on
+Twitter or the [Titanium mailing
+list](https://groups.google.com/forum/#!forum/clojure-titanium)
+
+Let us know what was unclear or what has not been covered. Maybe you
+do not like the guide style or grammar or discover spelling
+mistakes. Reader feedback is key to making the documentation better.

@@ -1,7 +1,21 @@
 ---
-title: "Types"
+title: "Property and Edge Label Types"
 layout: article
 ---
+
+## About this guide
+
+This guide covers
+
+ * Data modelling in Titanium
+ * Defining custom property and edge label types in Titanium
+
+
+## What version of Titanium does this guide cover?
+
+This guide covers Titanium 1.0.0-beta1.
+
+
 
 ## Working with types
 
@@ -134,3 +148,22 @@ throw errors. Titanium provides the idempotent methods
 will check to see if the given type exists and then, if it does not,
 it will create the type. Otherwise it will do nothing. So, please
 remember, types are forever (or until you clear your database). 
+
+
+## What's next
+
+We recommend that you read the following guides in this order:
+
+ * [Ogre Integration](/articles/ogre.html)
+
+
+
+## Tell Us What You Think!
+
+Please take a moment to tell us what you think about this guide on
+Twitter or the [Titanium mailing
+list](https://groups.google.com/forum/#!forum/clojure-titanium)
+
+Let us know what was unclear or what has not been covered. Maybe you
+do not like the guide style or grammar or discover spelling
+mistakes. Reader feedback is key to making the documentation better.

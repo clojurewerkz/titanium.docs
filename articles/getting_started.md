@@ -3,7 +3,7 @@ title: "Getting Started with Titanium, a Clojure graph library"
 layout: article
 ---
 
-# Getting Started
+## About this guide
 
 > Every journey begins with a single `(`. 
 
@@ -28,8 +28,13 @@ Commons Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available
 [on Github](https://github.com/clojurewerkz/titanium.docs).
 
+## What version of Titanium does this guide cover?
 
-## What Titanium is
+This guide covers Titanium 1.0.0-beta1.
+
+
+
+## Titanium Overview
 
 Titanium is a Clojure graph library built on top of
 [Aurelius Titan](http://thinkaurelius.github.com/titan/). Titanium
@@ -62,7 +67,9 @@ most recent stable release is always recommended.
 
 ### With Leiningen
 
-    [clojurewerkz/titanium "1.0.0-beta1"]
+``` clojure
+[clojurewerkz/titanium "1.0.0-beta1"]
+```
 
 ### With Maven
 
@@ -122,7 +129,7 @@ Additionally, Titanium can also store graphs in memory.
 
 In this guide, we will be introducing some features of Titanium using
 an embedded instance of BerkeleyDB. For information about how to use
-other database backends, please see the [configuration guide](). To
+other database backends, please see the [configuration guide](https://github.com/thinkaurelius/titan/wiki/Graph-Configuration). To
 start working with Titan, we will pass a map of configuration
 properties to `clojurewerkz.titanium.graph/open`. The function will
 use the Titan API to open up a new graph with the specified
@@ -157,7 +164,7 @@ namespaces do and how they interact.
 (tg/open (System/getProperty "java.io.tmpdir"))            
 ```
 
-## Creating vertices
+## Creating Vertices
 
 Vertices are created using `clojurewerkz.titanium.vertices/create!`.
 This function optionally takes in a map of properties to assign to the
@@ -179,7 +186,7 @@ To create two nodes with associated data:
  (tv/create! {:name "Zack"    :location "America"}))
 ```
 
-## Creating edges
+## Creating Edges
 
 Now that we know how to create vertices, we can begin creating edges
 with the `clojurewerkz.titanium.edges/connect!` function. Edges can
@@ -193,9 +200,9 @@ optionally have properties, just like vertices.
    (te/connect! p1 :meaningful  p2 {:verified-on "February 11th, 2013"})))
 ```
 
-## Indexing and retrieving vertices 
+## Indexing and Retrieving Vertices 
 
-Titanium isn't just a write only database. The library provides a
+Titanium provides a
 variety of functions for indexing and finding various objects.
 `clojurewerkz.titanium.vertices/find-by-kv` takes in a keyword and a
 value and finds all of the vertices with the corresponding key/value
@@ -220,7 +227,7 @@ the type and then creates a
  (tv/find-by-kv :age 22))
 ```
 
-## Simple queries 
+## Simple Queries 
 
 The final building block we need is to be able to ask questions about
 the graph we are constructing. Simple queries are handled by functions
@@ -249,12 +256,12 @@ function that provides the degree of a given vertex.
    (println (map degree-of [v1 v2 v3 v4]))))
 ```
 
-## Removing objects
+## Removing Objects
 
 Removing object from a graph is straightforward. Call
 `clojurewerkz.titanium.edges/remove!` to remove an edge. To remove
 vertices, first make sure that all edges incident to the vertex are
-removed and then call `clojurewerkz.titanium.vertices/removed!`. Let's
+removed and then call `clojurewerkz.titanium.vertices/remove!`. Let's
 use these methods to write a method that clears a database completely
 of all it's objects. We'll use
 `clojurewerkz.titanium.vertices/get-all-vertices` and
@@ -283,7 +290,7 @@ straightforward.
    (println (count (tv/get-all-vertices)) (count (te/get-all-edges)))))
 ```
 
-## Graph theory for smug lisp weenies
+## A Bit of Graph Theory
 
 Now we know how to create vertices and connect them together and ask
 questions about the degree of those vertices. Which, when you think
@@ -357,7 +364,7 @@ ask on the
 subscribe to [our blog](http://blog.clojurewerkz.org) and/or
 [follow us on Twitter](http://twitter.com/ClojureWerkz).
 
-### What's next
+## What's next
 
 We recommend that you read the following guides in this order:
 
@@ -367,3 +374,14 @@ We recommend that you read the following guides in this order:
  * [Working with Edges](/articles/edges.html) 
  * [Defining Types](/articles/types.html)  
  * [Ogre Integration](/articles/ogre.html)
+
+
+## Tell Us What You Think!
+
+Please take a moment to tell us what you think about this guide on
+Twitter or the [Titanium mailing
+list](https://groups.google.com/forum/#!forum/clojure-titanium)
+
+Let us know what was unclear or what has not been covered. Maybe you
+do not like the guide style or grammar or discover spelling
+mistakes. Reader feedback is key to making the documentation better.

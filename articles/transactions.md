@@ -3,7 +3,24 @@ title: "Transaction Management"
 layout: article 
 ---
 
-## Transaction Management
+## About This Guide
+
+This guide covers
+
+ * How to use transactions in Titanium
+ * Explicit and automatic transactions
+
+
+## What version of Titanium does this guide cover?
+
+This guide covers Titanium 1.0.0-beta1.
+
+
+
+## Overview
+
+Titan supports transactions on graph operations. Titanium exposes
+this functionality in a Clojure-friendly way.
 
 During the development of Archimedes and Titanium, a decision was made
 to only support explict use of transactions. That means that errors
@@ -17,6 +34,7 @@ is very simple and is accomplished via
 and why this style of transaction management is used.
 
 ### Transaction fundamentals 
+
 If you've read the
 [getting started guide](articles/getting_started.html), you'll already
 have had exposure to `transact!`. Using `transact!` is
@@ -103,3 +121,24 @@ Geometric backing off with small random offset:
                             (println (float (/ (- (System/currentTimeMillis) start-time) 1000)))
                             (/ 1 0)))
 ```
+
+### What's next
+
+We recommend that you read the following guides in this order:
+
+ * [Configuring Titan](/articles/configuration.html) 
+ * [Working with Vertices](/articles/vertices.html)
+ * [Working with Edges](/articles/edges.html) 
+ * [Defining Types](/articles/types.html)  
+ * [Ogre Integration](/articles/ogre.html)
+
+
+## Tell Us What You Think!
+
+Please take a moment to tell us what you think about this guide on
+Twitter or the [Titanium mailing
+list](https://groups.google.com/forum/#!forum/clojure-titanium)
+
+Let us know what was unclear or what has not been covered. Maybe you
+do not like the guide style or grammar or discover spelling
+mistakes. Reader feedback is key to making the documentation better.

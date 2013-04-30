@@ -141,8 +141,19 @@ example](https://github.com/thinkaurelius/titan/wiki/Getting-Started)
 ;= #{ {:god "Neptune" :place "Sea"} {:god "Jupiter" :place "Sky"}}
 ```
 
-### Conclusion 
+## Wrapping Up
 
 That's just a taste of what Ogre can do. If you made it all the way
 here, you should really
 [read the docs](http://ogre.clojurewerkz.org/).
+
+
+## Tell Us What You Think!
+
+Please take a moment to tell us what you think about this guide on
+Twitter or the [Titanium mailing
+list](https://groups.google.com/forum/#!forum/clojure-titanium)
+
+Let us know what was unclear or what has not been covered. Maybe you
+do not like the guide style or grammar or discover spelling
+mistakes. Reader feedback is key to making the documentation better.
