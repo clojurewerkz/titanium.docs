@@ -39,7 +39,7 @@ All examples should run with the following namespace declaration and example dat
 
 ``` clojure
 (tg/transact! (te/label-of (te/refresh familial-tie)))
-;;:brother-to
+;= :brother-to
 ```
 ## Creation
 

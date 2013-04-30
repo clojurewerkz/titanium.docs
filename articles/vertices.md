@@ -63,7 +63,7 @@ To get a single property value, use `get`:
 
 ``` clojure
 (tg/transact! (tv/get (tv/refresh example-vertex) :name))
-;; Zack
+;= "Zack"
 ```
 
 ### Listing property names
@@ -73,7 +73,7 @@ To obtain a set of the property names for a node, use
 
 ``` clojure
 (tg/transact! (tv/keys (tv/refresh example-vertex)))
-;; #{:name :role}
+;= #{:name :role}
 ```
 
 ### Listing property values
@@ -83,7 +83,7 @@ To obtain a set of the property values for a node, use
 
 ``` clojure
 (tg/transact! (tv/vals (tv/refresh example-vertex)))
-;; #{"Zack" "Example"}
+;= #{"Zack" "Example"}
 ```
 
 ### Getting the id
@@ -92,7 +92,7 @@ To get the id of a vertex, use `id-of`:
 
 ``` clojure
 (tv/id-of example-vertex)
-;; 1337
+;= 1337
 ```
 
 ### Getting all properties
@@ -103,7 +103,7 @@ obtain an immutable Clojure map of their properties using
 
 ``` clojure
 (tg/transact! (tv/to-map (tv/refresh example-vertex)))
-;; {:name "Zack" :role "example" :__id__ 1337}
+;= {:name "Zack" :role "example" :__id__ 1337}
 ```
 
 Note that the returned maps will include all of the original

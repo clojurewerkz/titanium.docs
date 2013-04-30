@@ -24,7 +24,7 @@ straightforward:
 
 ```clojure
 (tg/transact! (tv/create!)) 
-;; #<PersistStandardTitanVertexv[404]> 
+;= #<PersistStandardTitanVertexv[404]> 
 ``` 
 
 Conceptually, think of `transact!` as a `do`. The result of
