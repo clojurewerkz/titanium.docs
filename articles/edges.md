@@ -82,8 +82,8 @@ the edge and assigns the given properties to it.
 
 
 ``` clojure
-(tg/transact! (tv/upconnect! (tv/refresh Zack)
                              :brother-to 
+(tg/transact! (te/upconnect! (tv/refresh Zack)
                              (tv/refresh Brooke)))
 ```
 
@@ -94,8 +94,8 @@ returns one edge. If more than one edge is returned, an error is
 thrown.
 
 ``` clojure
-(tg/transact! (tv/unique-upconnect! (tv/refresh Zack)
                                     :brother-to 
+(tg/transact! (te/unique-upconnect! (tv/refresh Zack)
                                     (tv/refresh Brooke)))
 ```
 
