@@ -189,7 +189,7 @@ The methods below provide various ways to retrieve vertices.
 
 ### Retrieving by id
 
-Given an id, `find-by-id` retrieves the vertex with that idea. 
+Given an id, `find-by-id` retrieves the vertex with that ID.
 
 ``` clojure
 (tg/transact! (tv/find-by-id 24601))
